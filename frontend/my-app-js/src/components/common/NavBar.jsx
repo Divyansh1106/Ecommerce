@@ -1,5 +1,5 @@
 import logo from '../../assets/images/logo.png'
-const NavBar = () => {
+const NavBar = ({cartItems}) => {
     return (
             <nav className="w-full border-b bg-white">
       <div className=" h-16 px-6 flex items-center justify-between mx-auto">
@@ -32,7 +32,7 @@ const NavBar = () => {
         <div className="relative cursor-pointer">
           <span className="text-xl">🛒</span>
           <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs px-2 rounded-full">
-            0
+            {cartItems}
           </span>
         </div>
 
