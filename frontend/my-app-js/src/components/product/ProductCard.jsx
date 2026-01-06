@@ -1,5 +1,8 @@
-const ProductCard = ({pro, cartItems, addCart}) => {
+import useCounterStore  from '../../store/cartStore.js';
+import { toast } from "react-toastify";
+const ProductCard = ({pro}) => {
   
+  const {count, addProduct} = useCounterStore();
   return (
     <div className="border rounded-lg p-4 shadow hover:shadow-lg transition-shadow duration-300">
       <img
@@ -21,7 +24,8 @@ const ProductCard = ({pro, cartItems, addCart}) => {
       
         
       </div>
-      <button className="w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300" onClick={() => addCart(cartItems + 1)}>
+      <button className="w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300" onClick={() => {addProduct(pro);toast.success("Added to cart 🛒");
+}}>
           Add to Cart
         </button>
         </div>

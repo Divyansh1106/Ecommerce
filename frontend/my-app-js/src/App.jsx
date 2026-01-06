@@ -10,6 +10,10 @@ import backpack from './assets/images/LaptopBagpack.png'
 import smartwatch from './assets/images/smartwatch.png'
 import usbc from './assets/images/USBC.png'
 import { useState } from 'react'
+import { Routes, Route } from "react-router-dom";
+import Cart from "./pages/Cart.jsx";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -69,27 +73,55 @@ function App() {
     image: usbc
   }
 ];
+const [query, setQuery] = useState("");
 
-  const [count,setCount]=useState(0);
-  const Map=new Map();
-  products.forEach((product)=>{
-    Map.set(product.id,0);
-  })
+const normalizedQuery = query.trim().toLowerCase();
+
+const filteredProducts =
+  normalizedQuery.length === 0
+    ? products
+    : products.filter((product) =>
+        product.name.toLowerCase().includes(normalizedQuery)
+      );
+
+
+
+  
+  
  
 
   return (
+    <>
+    <Routes>
+    <Route path="/" element=
+     {
    <div className="min-h-screen flex flex-col">
     <main className="flex-grow">
-    <NavBar cartItems={count} />
+    <NavBar setQuery={setQuery} />
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6'>
-      {products.map(product => (
-        <ProductCard key={product.id} pro={product} cartItems={count} addCart={setCount} />
+      {filteredProducts.map(product => (
+        <ProductCard key={product.id} pro={product}  />
       ))}
     </div>
     </main>
     <Footer /> 
   
   </div>
+}/>
+<Route path="/cart" element={<Cart allProducts={products} />} />
+  </Routes>
+   <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
+    </>
+  
+  
 
   )
 }
