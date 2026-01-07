@@ -5,11 +5,15 @@ import NavBar from "../components/common/NavBar.jsx";
 import Footer from "../components/common/Footer.jsx";
 import Confetti from "react-confetti";
 import { useEffect, useRef, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import Signup from "../pages/Signup";
+import { useNavigate } from "react-router-dom";
 
 
-const FreeDeliveryAmount=10;
+const FreeDeliveryAmount=100;
 
 const CartPage = ({ allProducts }) => {
+  const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(false);
 const hasCelebrated = useRef(false);
   const { products, count, clearCart } = useCounterStore();
@@ -38,20 +42,51 @@ const hasCelebrated = useRef(false);
     // Stop confetti after 3 seconds
     setTimeout(() => {
       setShowConfetti(false);
-    }, 3000);
+    }, 30000);
   }
 }, [totalPrice]);
 
   return (
     <div>
       {showConfetti && (
-  <Confetti
-    numberOfPieces={250}
-    gravity={0.3}
-    recycle={false}
-   
-  />
+  <>
+    <Confetti
+      numberOfPieces={2500}
+      gravity={0.3}
+      recycle={false}
+    />
+
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div
+        className="bg-white rounded-2xl px-8 py-6 text-center shadow-2xl
+                   animate-[pop_0.6s_ease-out] max-w-sm w-full"
+      >
+        <div className="text-5xl mb-3 animate-bounce">🎉</div>
+
+        <h2 className="text-2xl font-bold text-emerald-600 mb-2">
+          Congratulations!
+        </h2>
+
+        <p className="text-gray-700 mb-4">
+          You’ve unlocked <span className="font-semibold">
+          FREE delivery</span> 🚚
+        </p>
+
+        <button
+          onClick={() => {
+            setShowConfetti(false);
+            hasCelebrated.current = true;
+          }}
+          className="mt-2 bg-emerald-500 text-white px-6 py-2
+                     rounded-full hover:bg-emerald-600 transition"
+        >
+          Awesome!
+        </button>
+      </div>
+    </div>
+  </>
 )}
+
 
       <NavBar />
 
@@ -96,7 +131,7 @@ const hasCelebrated = useRef(false);
       {/* TEXT */}
       {remaining > 0 ? (
         <p className="text-sm text-emerald-700 mb-2">
-          Add <span className="font-bold">$npm install react-confetti{remaining.toFixed(2)}</span> more
+          Add <span className="font-bold">{remaining.toFixed(2)}</span> more
           to get <span className="font-bold">FREE delivery</span> 🚚
         </p>
       ) : (
@@ -122,7 +157,9 @@ const hasCelebrated = useRef(false);
                   Total Cost: <span className=" text-2xl">${totalPrice.toFixed(2)}</span>
                 </p>
 
-                <button
+                <button onClick={()=>{
+                  navigate('/signup')
+                }} 
                   className="w-full bg-yellow-400 text-black font-semibold
                              py-3 rounded-lg hover:bg-yellow-500 transition
                              shadow-md"

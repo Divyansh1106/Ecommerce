@@ -9,11 +9,13 @@ import speaker from './assets/images/speaker.png'
 import backpack from './assets/images/LaptopBagpack.png'
 import smartwatch from './assets/images/smartwatch.png'
 import usbc from './assets/images/USBC.png'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Cart from "./pages/Cart.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
+import useUserStore from './store/userStore.js'
+import Signup from './pages/Signup.jsx'
 
 
 
@@ -86,6 +88,8 @@ const filteredProducts =
 
 
 
+
+
   
   
  
@@ -109,6 +113,7 @@ const filteredProducts =
   </div>
 }/>
 <Route path="/cart" element={<Cart allProducts={products} />} />
+<Route path="/signup" element={<Signup/>}></Route>
   </Routes>
    <ToastContainer
         position="top-right"

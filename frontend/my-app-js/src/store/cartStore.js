@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+
 const useCounterStore = create(
   persist(
     (set, get) => ({
@@ -11,7 +12,7 @@ const useCounterStore = create(
 
       // ➕ Add product
       addProduct: (pro) =>
-        set((state) => {
+        {set((state) => {
           const newQty = (state.products[pro.id] || 0) + 1;
 
           return {
@@ -21,7 +22,7 @@ const useCounterStore = create(
             },
             count: state.count + 1,
           };
-        }),
+        })},
 
       // ➖ Remove product (one quantity)
       removeProduct: (pro) =>
