@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { CreditCard, Lock, ShoppingBag, Truck, Check } from 'lucide-react';
 import useCounterStore from '../store/cartStore';
 import UseUserStore from '../store/userStore';
-export default function CheckoutPage() {
+export default function CheckoutPage({pro}) {
   const {products,count} = useCounterStore();
-  const {user} = UseUserStore();
+  const user = UseUserStore((state) => state.user);
+  console.log("USER IN CHECKOUT:", user);
   const [step, setStep] = useState(1);
   const [addressOption, setAddressOption] = useState('existing');
   const [selectedAddress, setSelectedAddress] = useState('');
   const [formData, setFormData] = useState({
     address: '',
     city: '',
-    zipCode: '',
-    country: 'United States',
+     PIN: '',
+     state:'',
+   
     cardNumber: '',
     cardName: '',
     expiry: '',
@@ -20,18 +22,20 @@ export default function CheckoutPage() {
     saveInfo: false,
   });
 
-  const savedAddresses=user.address
+  const savedAddresses=user.addresses||[]
 
-  const cartItems = [
-    { id: 1, name: 'Wireless Headphones', price: 149.99, quantity: 1, image: '🎧' },
-    { id: 2, name: 'Smart Watch', price: 299.99, quantity: 1, image: '⌚' },
-    { id: 3, name: 'Phone Case', price: 24.99, quantity: 2, image: '📱' },
-  ];
+  const cartItems = pro
+  .filter(product => products[product.id])
+  .map(product => ({
+    ...product,
+    count: products[product.id]
+  }));
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = 15.00;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+      
+  
+
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
+ 
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -312,13 +316,13 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-6">
                 {cartItems.map(item => (
                   <div key={item.id} className="flex gap-3">
-                    <div className="text-3xl">{item.image}</div>
+                    <div className="text-3xl"><img src={item.image}></img></div>
                     <div className="flex-1">
                       <h3 className="font-medium text-gray-800">{item.name}</h3>
-                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">Qty: {item.count}</p>
                     </div>
                     <div className="font-semibold text-gray-800">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.price * item.count).toFixed(2)}
                     </div>
                   </div>
                 ))}
@@ -326,17 +330,9 @@ export default function CheckoutPage() {
 
               <div className="border-t pt-4 space-y-3">
                 <div className="flex justify-between text-gray-600">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  
                 </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>Shipping</span>
-                  <span>${shipping.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
-                </div>
+                
                 <div className="border-t pt-3 flex justify-between text-lg font-bold text-gray-800">
                   <span>Total</span>
                   <span>${total.toFixed(2)}</span>

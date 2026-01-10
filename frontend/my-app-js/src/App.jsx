@@ -115,7 +115,7 @@ const filteredProducts =
 }/>
 <Route path="/cart" element={<Cart allProducts={products} />} />
 <Route path="/signup" element={<Signup/>}></Route>
-<Route path="/checkout" element={<CheckoutPage/>}></Route>
+<Route path="/checkout" element={<CheckoutPage pro={products}/>}></Route>
   </Routes>
    <ToastContainer
         position="top-right"

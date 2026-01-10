@@ -97,7 +97,10 @@ const Signup = () => {
   };
 
   const onSubmitStage2 = (data) => {
-    addAddress(data);
+    addAddress({
+  id: user.addresses.length + 1,
+  ...data
+});
     
     handleSignupSuccess();
     alert("Signup Completed ✅");
