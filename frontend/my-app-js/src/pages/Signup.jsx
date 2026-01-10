@@ -3,6 +3,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import citiesByState from "../assets/states"; 
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import CheckoutPage from "./Checkout";
+import UseUserStore from "../store/userStore";
 /* ================= YUP SCHEMAS ================= */
 
 const stage1Schema = yup.object({
@@ -24,16 +28,24 @@ const stage2Schema = yup.object({
 
 const citiesByStates=citiesByState;
 
-const userStore = {
-  user: {},
-  setUser: function(data) {
-    this.user = { ...this.user, ...data };
-  }
-};
+
 
 /* ================= COMPONENT ================= */
 
 const Signup = () => {
+  const {user,setUser,addAddress} = UseUserStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const fromPage = location.state?.from;
+
+  const handleSignupSuccess = () => {
+    if (fromPage === "cart") {
+      navigate("/checkout");
+    } else {
+      navigate("/");
+    }
+  };
   const [stage, setStage] = useState(1);
 
   /* ---------- STAGE 1 FORM ---------- */
@@ -79,12 +91,15 @@ const Signup = () => {
       alert("Invalid OTP");
       return;
     }
-    userStore.setUser(data);
+    
+   setUser({name:data.name,email:data.email,password:data.password,phone:data.phone});
     setStage(2);
   };
 
   const onSubmitStage2 = (data) => {
-    userStore.setUser(data);
+    addAddress(data);
+    
+    handleSignupSuccess();
     alert("Signup Completed ✅");
   };
 
@@ -153,7 +168,7 @@ const Signup = () => {
             </div>
 
             <button 
-              onMouseDown={handleSubmit(onSubmitStage1)}
+              onClick={handleSubmit(onSubmitStage1)}
               className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Continue
@@ -171,7 +186,7 @@ const Signup = () => {
             {/* STATE */}
             <div className="mb-4 relative">
               <input
-                {...register("State")}
+                {...register2("state")}
                 value={stateQuery}
                 onChange={(e) => {
                   setStateQuery(e.target.value);
@@ -210,6 +225,7 @@ const Signup = () => {
             {/* CITY */}
             <div className="mb-4 relative">
               <input
+                {...register2("city")}
                 value={cityQuery}
                 onChange={(e) => {
                   setCityQuery(e.target.value);
@@ -226,7 +242,7 @@ const Signup = () => {
                   {filteredCities.map((city) => (
                     <li
                       key={city}
-                      onMouseDown={(e) => {
+                        onMouseDown={(e) => {
                         e.preventDefault();
                         setCityQuery(city);
                         setValue("city", city);
@@ -261,7 +277,7 @@ const Signup = () => {
             </div>
 
             <button 
-              onMouseDown={handleSubmit2(onSubmitStage2)}
+              onClick={handleSubmit2(onSubmitStage2)}
               className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Submit

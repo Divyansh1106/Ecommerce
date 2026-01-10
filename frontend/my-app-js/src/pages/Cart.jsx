@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import Signup from "../pages/Signup";
 import { useNavigate } from "react-router-dom";
+import UseUserStore from "../store/userStore.js";
 
 
 const FreeDeliveryAmount=100;
@@ -17,6 +18,18 @@ const CartPage = ({ allProducts }) => {
   const [showConfetti, setShowConfetti] = useState(false);
 const hasCelebrated = useRef(false);
   const { products, count, clearCart } = useCounterStore();
+  const {isAuthenticated} =UseUserStore()
+   const handleCheckout = () => {
+    if(!isAuthenticated)
+   { navigate("/signup", {
+      state: { from: "cart" }
+      
+    }) 
+    return
+  };
+  return navigate("/checkout")
+   
+  };
 
   const cartItems = allProducts.filter(
     (product) => products[product.id]
@@ -158,7 +171,8 @@ const hasCelebrated = useRef(false);
                 </p>
 
                 <button onClick={()=>{
-                  navigate('/signup')
+                  handleCheckout()
+                  
                 }} 
                   className="w-full bg-yellow-400 text-black font-semibold
                              py-3 rounded-lg hover:bg-yellow-500 transition

@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
 import useUserStore from './store/userStore.js'
 import Signup from './pages/Signup.jsx'
+import CheckoutPage from './pages/Checkout.jsx'
 
 
 
@@ -114,6 +115,7 @@ const filteredProducts =
 }/>
 <Route path="/cart" element={<Cart allProducts={products} />} />
 <Route path="/signup" element={<Signup/>}></Route>
+<Route path="/checkout" element={<CheckoutPage/>}></Route>
   </Routes>
    <ToastContainer
         position="top-right"

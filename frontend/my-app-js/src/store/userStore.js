@@ -1,17 +1,42 @@
 import {create} from "zustand"
 import {persist} from "zustand/middleware"
-const useUserStore=create(persist((set,get)=>({
-    user:null,
+const UseUserStore=create(persist((set,get)=>({
+    user:{
+        name:"",
+        email:"",
+        phone:"",
+        password:"",
+        addresses:[]
+
+        
+    },
     isAuthenticated:false,
     
-    setUser:(user)=>{
-        if(user)set({user,isAuthenticated:true});
+    setUser:(data)=>{
+        if(data)set((state)=>({user:{...state.user,...data},isAuthenticated:true}));
+
         
     },
 
     removeUser:()=>{
-       set({user:null,isAuthenticated:false});
-    }
+       set({user:{
+        name:"",
+        email:"",
+        phone:"",
+        password:"",
+        addresses:[]
+
+       },isAuthenticated:false});
+    },
+    addAddress:(address)=>{
+       
+    set((state) => ({
+      user: {
+        ...state.user,
+        addresses: [...state.user.addresses, address]
+      }
+    }))
+    },
 
 
 
@@ -26,6 +51,6 @@ const useUserStore=create(persist((set,get)=>({
 }
 
 ))
-export default useUserStore;
+export default UseUserStore;
 
 
