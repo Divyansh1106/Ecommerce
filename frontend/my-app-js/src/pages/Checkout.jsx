@@ -3,12 +3,14 @@ import { CreditCard, Lock, ShoppingBag, Truck, Check } from 'lucide-react';
 import useCounterStore from '../store/cartStore';
 import UseUserStore from '../store/userStore';
 export default function CheckoutPage({pro}) {
+  const {addAddress}=UseUserStore();
   const {products,count} = useCounterStore();
   const user = UseUserStore((state) => state.user);
   console.log("USER IN CHECKOUT:", user);
   const [step, setStep] = useState(1);
   const [addressOption, setAddressOption] = useState('existing');
   const [selectedAddress, setSelectedAddress] = useState('');
+  const [check, setCheck] = useState(false)
   const [formData, setFormData] = useState({
     address: '',
     city: '',
@@ -47,6 +49,11 @@ export default function CheckoutPage({pro}) {
 
   const handleContinue = () => {
     if (step < 2) {
+      if(addressOption==="new"){
+        if(check){
+          addAddress({city:formData.city,address:formData.address, PIN:formData.zipCode,country:formData.country, state:formData.state,})
+        }
+      }
       setStep(step + 1);
     } else {
       alert('Order placed successfully!');
@@ -203,7 +210,19 @@ export default function CheckoutPage({pro}) {
                             <option>Australia</option>
                           </select>
                         </div>
+                         <label className="flex items-center gap-3 cursor-pointer">
+  <input
+    type="checkbox"
+    checked={check}
+    onChange={(e) => setCheck(e.target.checked)}
+    className="h-4 w-4 accent-blue-600 cursor-pointer"
+  />
+  <span className="text-sm text-gray-700">
+    Save this address for future use
+  </span>
+</label>
                       </div>
+                      
                     )}
                   </div>
                 )}
